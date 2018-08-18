@@ -1,0 +1,84 @@
+﻿<Window x:Class="SamplingManager.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamplingManager.App"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d"
+        Title="Sampling Manager" Height="450" Width="950">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="Experiment Name:" FontSize="16"/>
+            <TextBox Width="300" FontSize="16" VerticalContentAlignment="Center" Text="{Binding ExperimentName}"/>
+        </StackPanel>
+
+        <DataGrid Name="ExperimentDataGrid" Grid.Row="1" ItemsSource="{Binding Measurements}" />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" BorderThickness="1" Margin="5, 0">
+                <lvc:CartesianChart Series="{Binding WeightGraphData}" LegendLocation="Top" >
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Weight [gram]" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Time [sec]" Labels="{Binding WeightGraphLabels}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+            </Border>
+            <Border Grid.Column="1" BorderThickness="1" Margin="5, 0">
+                <lvc:CartesianChart Series="{Binding SpeedGraphData}" LegendLocation="Top" >
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Speed [gram/sec]" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Time [sec]" Labels="{Binding SpeedGraphLabels}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+            </Border>
+            <Border  Grid.Column="2" BorderThickness="1" Margin="5, 0">
+                <lvc:CartesianChart Series="{Binding AccelerationGraphData}" LegendLocation="Top" >
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Acceleration [gram/sec^2]" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Time [sec]" Labels="{Binding AccelerationGraphLabels}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+            </Border>
+        </Grid>
+
+        <DockPanel Grid.Row="3">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Margin="3, 3" Width="60" FontSize="16" Content="Start" Command="{Binding StartCommand}"/>
+                <Button Margin="3, 3" Width="60" FontSize="16" Content="Pause"/>
+                <Button Margin="3, 3" Width="60" FontSize="16" Content="Stop" Command="{Binding StopCommand}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Sampling Interval:" FontSize="16"/>
+                    <TextBox VerticalContentAlignment="Center" FontSize="16" Text="{Binding ExperimentSettings.SamplingIntervalMilliseconds}"/>
+                    <Label Content="Delta Only:" FontSize="16" Margin="5, 0"/>
+                    <CheckBox IsChecked="{Binding IsDeltaOnly}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" DockPanel.Dock="Right">
+                <Button Margin="3, 3" Width="60" FontSize="16" Content="Export" Command="{Binding ExportCommand}"/>
+            </StackPanel>
+        </DockPanel>
+
+    </Grid>
+</Window>

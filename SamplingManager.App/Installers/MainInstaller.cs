@@ -7,6 +7,8 @@ using SamplingManager.App.Logic.Sources;
 using SamplingManager.App.Logic.Sources.Settings;
 using SamplingManager.App.ViewModels;
 using SamplingManager.App.Views;
+using System;
+using System.Configuration;
 
 namespace SamplingManager.App.Installers
 {
@@ -18,7 +20,9 @@ namespace SamplingManager.App.Installers
             container.Register(Component.For<IMainViewModel>().ImplementedBy<MainViewModel>().LifestyleSingleton());
 
             container.Register(Component.For<IMeasurementManager>().ImplementedBy<MeasurementManager>().LifestyleSingleton());
-            container.Register(Component.For<IMeasurementSource>().ImplementedBy<KWScaleSource>().LifestyleSingleton());
+
+            RegisterMeasurementSource(container);
+
             container.Register(Component.For<IScaleSettings>()
                 .ImplementedBy<ScaleSettings>()
                 .LifestyleSingleton()
@@ -27,6 +31,31 @@ namespace SamplingManager.App.Installers
                 Dependency.OnAppSettingsValue("BaudRate")));
 
             container.Register(Component.For<IExporter>().ImplementedBy<CsvExporter>().LifestyleSingleton());
+        }
+
+        private static void RegisterMeasurementSource(IWindsorContainer container)
+        {
+            var model = ConfigurationManager.AppSettings["Model"];
+
+            switch (model)
+            {
+                case "KWS":
+                    container.Register(
+                        Component.For<IMeasurementSource>()
+                        .ImplementedBy<KWScaleSource>()
+                        .LifestyleSingleton());
+                    break;
+
+                case "RADWAG":
+                    container.Register(
+                        Component
+                        .For<IMeasurementSource>()
+                        .ImplementedBy<RadwagScaleSource>()
+                        .LifestyleSingleton());
+                    break;
+                default:
+                    throw new NotSupportedException($"The model: {model} is not supported!");
+            }
         }
     }
 }

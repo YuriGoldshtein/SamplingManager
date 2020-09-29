@@ -113,6 +113,8 @@
     <Compile Include="Logic\IMeasurementManager.cs" />
     <Compile Include="Logic\Sources\IMeasurementSource.cs" />
     <Compile Include="Logic\MeasurementManager.cs" />
+    <Compile Include="Logic\Sources\RadwagScaleSource.cs" />
+    <Compile Include="Logic\Sources\SerialPortScaleSource.cs" />
     <Compile Include="Logic\Sources\Settings\IScaleSettings.cs" />
     <Compile Include="Logic\Sources\KWScaleSource.cs" />
     <Compile Include="Logic\Sources\Settings\ScaleSettings.cs" />
